@@ -22,25 +22,34 @@ def func_scroll(delta_time: float, window: GraphWin, text: Text):
     x_stat = 0
     y_stat = 0
 
+    def scroll(tiks):
+        nonlocal x_stat, y_stat, x_end, y_end
+        # Window
+        x_end += tiks
+        y_end += tiks
+        x_stat -= tiks
+        y_stat -= tiks
+        # Text
+        text.move(tiks * 0.75, tiks * -0.9)
+        text.setText("Tiks: " + str(all_time))
+        print("All Tiks: " + str(all_time))
+        window.setCoords(x_stat, y_stat, x_end, y_end)
+
     def next_moment():
-        nonlocal all_time, loop_time, x_stat, y_stat, x_end, y_end
+        nonlocal all_time, loop_time
         # Увеличение масштаба
         if loop_time > 1.0:
             # Time
             loop_time = 0
-            # Window
-            x_end += 5
-            y_end += 5
-            x_stat -= 5
-            y_stat -= 5
-            # Text
-            text.move(4, -4.5)
-            text.setText("All time: " + str(all_time))
-            print("All time: " + str(all_time))
-            window.setCoords(x_stat, y_stat, x_end, y_end)
+
+        # Scroll Window
+        scroll(1)
+
         # Подсчёт времени
         all_time += delta_time
         loop_time += delta_time
+
+        time.sleep(0.5)
 
         return all_time
 
@@ -52,7 +61,6 @@ def draw_step(cells, window, time_scroll):
         i.draw(window)
 
     time_scroll()
-    time.sleep(0.5)
 
     for i in cells:
         i.undraw()
