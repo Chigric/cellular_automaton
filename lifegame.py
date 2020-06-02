@@ -49,7 +49,7 @@ def func_scroll(delta_time: float, window: GraphWin, text: Text):
         all_time += delta_time
         loop_time += delta_time
 
-        time.sleep(2)
+        time.sleep(0.5)
 
         return all_time
 
@@ -77,22 +77,6 @@ def compare_points(left: Point, right: Point):
     return True \
         if (left.getX() == right.getX()
             and left.getY() == right.getY()) \
-        else False
-
-
-def compare_points_closure(left: Point):
-    def crutch(right: Point):
-        return True \
-            if (left.getX() == right.getX()
-                and left.getY() == right.getY()) \
-            else False
-    return crutch
-
-
-def __eq__(self: Point, right_point: Point):
-    return True \
-        if (self.getX() == right_point.getX()
-            and self.getY() == right_point.getY()) \
         else False
 
 
@@ -130,13 +114,13 @@ def live_rools(neighbors_quant):
 
 
 def step(cells: list):
-    def getCellsFromNeighbors(curPoint: Point, neighbors: list):
+    def getCellsFromNeighbors(curPoint: Cell, neighbors: list):
         cells_neighbors = []
         not_cells_neighbors = []
         for pt in cells:
-            if not compare_points(pt, curPoint):
+            if not pt == curPoint:
                 for neig in neighbors:
-                    if compare_points(pt, neig):
+                    if pt == neig:
                         cells_neighbors.append(pt)
 
         return cells_neighbors
@@ -158,7 +142,7 @@ def step(cells: list):
             # для подтверждения, что i нет в cells
             proof = 0
             for j in cells:
-                if not compare_points(i, j) and not compare_points(j, curPoint):
+                if not i == j and not j == curPoint:
                     proof += 1
                     # нужно выйти из цикла cells
                     continue
@@ -166,7 +150,7 @@ def step(cells: list):
             # Нет ли i уже в other_neighbors?
             save_proof = proof
             for k in other_neighbors:
-                if not compare_points(i, k):
+                if not i == k:
                     proof += 1
                     # нужно выйти из цикла cells и other_neighbors
                     continue
@@ -178,8 +162,6 @@ def step(cells: list):
 
             if proof == len(cells) - 1:
                 other_neighbors.append(i)
-
-
 
     # Возвращает все клетки, которые не могут быть возраждены (оживлены)
     def revive_cells(other_neighbors):
@@ -202,11 +184,10 @@ def step(cells: list):
         will_revive_cells = revive_cells(other_neighbors)
 
         # Проверка уникальности значений will_revive_cells относительно newCells
-        #newCells.extend(will_revive_cells)
         for i in will_revive_cells:
             proof = 0
             for j in newCells:
-                if not compare_points(i, j):
+                if not i == j:
                     proof += 1
             if proof == len(newCells):
                 newCells.append(i)

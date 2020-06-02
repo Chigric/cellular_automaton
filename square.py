@@ -32,6 +32,15 @@ class Cell(Square):
     def getY(self):
         return self.p1.getY()
 
+    def __eq__(self: Point, right_cell):
+        if type(right_cell) == Cell:
+            return True \
+                if (self.getX() == right_cell.getX()
+                    and self.getY() == right_cell.getY()) \
+                else False
+        else:
+            pass
+
 
 # Создаёт список Cells из списка Points
 def cell_factory(list_pt: list):
