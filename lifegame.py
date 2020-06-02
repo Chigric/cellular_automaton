@@ -110,15 +110,9 @@ def live_rools(neighbors_quant: int):
 
 
 def step(cells: list):
-    # Выбираем из соседей живые клетки
-    def getCellsFromNeighbors(cur_point: Cell, neighbors: list):
-        return [pt
-                for pt in cells if not pt == cur_point
-                for neig in neighbors if pt == neig]
-
     # Возращает кол-во соседей-клеток вокруг cur_point
-    def lookAtNeighbors(cur_point: Cell):
-        return len(getCellsFromNeighbors(cur_point, get_neighbors(cur_point)))
+    def look_at_neighbors(cur_point: Cell):
+        return len([x for x in get_neighbors(cur_point) if x in cells])
 
     # Добавляет в other_neighbors всех соседей cur_pt,
     # которых нет в cells и в other_neighbors уже не присутствуют
@@ -131,39 +125,36 @@ def step(cells: list):
             for j in cells:
                 if not i == j and not j == cur_pt:
                     proof += 1
-                    # нужно продолжить цикл cells
-                    continue
-
+                    continue  # нужно продолжить цикл cells
             # Нет ли i уже в other_neighbors?
             save_proof = proof
             for k in other_neighbors:
                 if not i == k:
                     proof += 1
-                    # нужно выйти из цикла cells и other_neighbors
-                    continue
+                    continue  # нужно выйти из цикла cells и other_neighbors
                 else:
-                    # i есть в other_neighbors!
-                    break
+                    break  # i есть в other_neighbors!
             if proof >= len(other_neighbors) + save_proof:
                 proof = save_proof
-
             if proof == len(cells) - 1:
                 other_neighbors.append(i)
 
     # Возвращает все клетки, которые могут быть возраждены (оживлены)
     def revive_cells(other_neighbors: list):
-        return filter(lambda x: alive_rools(lookAtNeighbors(x)),
+        return filter(lambda x: alive_rools(look_at_neighbors(x)),
                       other_neighbors)
 
+    # Живые клетки на следующей итерации
     new_cells = cells.copy()
     other_neighbors = []
     for pt in cells:
-        neighbors_quant = lookAtNeighbors(pt)
+        # Выживет ли клетка на след. итерации
+        neighbors_quant = look_at_neighbors(pt)
         if live_rools(neighbors_quant):
             new_cells.remove(pt)
         # Генерируем клетки, которые можно оживить
         new_other_neighbors(pt, other_neighbors)
-        will_revive_cells = revive_cells(other_neighbors)
+        will_revive_cells = revive_cells(other_neighbors)  # Клетки для оживления
         # Проверка уникальности значений will_revive_cells относительно newCells
         new_cells.extend(filter(lambda x: not (x in new_cells), will_revive_cells))
 
