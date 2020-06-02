@@ -121,7 +121,7 @@ def step(cells: list):
         return len(getCellsFromNeighbors(cur_point, get_neighbors(cur_point)))
 
     # Добавляет в other_neighbors всех соседей cur_pt,
-    # которых нет в cells и там не присутствуют
+    # которых нет в cells и в other_neighbors уже не присутствуют
     def new_other_neighbors(cur_pt: Cell, other_neighbors: list):
         neighbors = get_neighbors(cur_pt)
         for i in neighbors:
@@ -131,7 +131,7 @@ def step(cells: list):
             for j in cells:
                 if not i == j and not j == cur_pt:
                     proof += 1
-                    # нужно выйти из цикла cells
+                    # нужно продолжить цикл cells
                     continue
 
             # Нет ли i уже в other_neighbors?
@@ -157,7 +157,6 @@ def step(cells: list):
             quant = lookAtNeighbors(pt)
             if alive_rools(quant):
                 will_revive_cells.append(pt)
-
         return will_revive_cells
 
     new_cells = cells.copy()
@@ -166,18 +165,11 @@ def step(cells: list):
         neighbors_quant = lookAtNeighbors(pt)
         if live_rools(neighbors_quant):
             new_cells.remove(pt)
-
+        # Генерируем клетки, которые можно оживить
         new_other_neighbors(pt, other_neighbors)
         will_revive_cells = revive_cells(other_neighbors)
-
         # Проверка уникальности значений will_revive_cells относительно newCells
-        for i in will_revive_cells:
-            proof = 0
-            for j in new_cells:
-                if not i == j:
-                    proof += 1
-            if proof == len(new_cells):
-                new_cells.append(i)
+        new_cells.extend(filter(lambda x: not (x in new_cells), will_revive_cells))
 
     return new_cells
 
