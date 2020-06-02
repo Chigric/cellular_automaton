@@ -49,7 +49,7 @@ def func_scroll(delta_time: float, window: GraphWin, text: Text):
         all_time += delta_time
         loop_time += delta_time
 
-        time.sleep(0.5)
+        time.sleep(2)
 
         return all_time
 
@@ -67,16 +67,10 @@ def draw_step(cells, window, time_scroll):
 
     return draw_step(step(cells), window, time_scroll)
 
-# Переписать с for'ами (по-человечески)
-def get_neighbors(pt):
-    return [Cell(Point(pt.getX(), pt.getY() + 1))
-        , Cell(Point(pt.getX(), pt.getY() - 1))
-        , Cell(Point(pt.getX() + 1, pt.getY()))
-        , Cell(Point(pt.getX() + 1, pt.getY() + 1))
-        , Cell(Point(pt.getX() + 1, pt.getY() - 1))
-        , Cell(Point(pt.getX() - 1, pt.getY()))
-        , Cell(Point(pt.getX() - 1, pt.getY() + 1))
-        , Cell(Point(pt.getX() - 1, pt.getY() - 1))]
+
+def get_neighbors(pt: Point):
+    return [Cell(Point(pt.getX() + i, pt.getY() + j))
+            for i in range(-1, 2, 1) for j in range(-1, 2, 1) if j != 0 or i != 0]
 
 
 def compare_points(left: Point, right: Point):
