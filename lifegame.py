@@ -150,14 +150,10 @@ def step(cells: list):
             if proof == len(cells) - 1:
                 other_neighbors.append(i)
 
-    # Возвращает все клетки, которые не могут быть возраждены (оживлены)
-    def revive_cells(other_neighbors):
-        will_revive_cells = []
-        for pt in other_neighbors:
-            quant = lookAtNeighbors(pt)
-            if alive_rools(quant):
-                will_revive_cells.append(pt)
-        return will_revive_cells
+    # Возвращает все клетки, которые могут быть возраждены (оживлены)
+    def revive_cells(other_neighbors: list):
+        return filter(lambda x: alive_rools(lookAtNeighbors(x)),
+                      other_neighbors)
 
     new_cells = cells.copy()
     other_neighbors = []
