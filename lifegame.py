@@ -32,7 +32,7 @@ def func_scroll(delta_time: float, window: GraphWin, text: Text):
         # Text
         text.move(ticks * 0.8, ticks * -0.9)
         text.setText("Ticks: " + str(all_time))
-        print("All Ticks: " + str(all_time))
+        #print("All Ticks: " + str(all_time))
         window.setCoords(x_stat, y_stat, x_end, y_end)
 
     def next_moment():
@@ -122,16 +122,12 @@ def step(cells: list):
             # Условие которое должно достигать (len(cells) - 1)
             # для подтверждения, что i нет в cells
             proof = 0
-            for j in cells:
-                if not i == j and not j == cur_pt:
-                    proof += 1
-                    continue  # нужно продолжить цикл cells
+            proof += len(list(filter(lambda j: i != j and j != cur_pt, cells)))
             # Нет ли i уже в other_neighbors?
             save_proof = proof
             for k in other_neighbors:
                 if not i == k:
                     proof += 1
-                    continue  # нужно выйти из цикла cells и other_neighbors
                 else:
                     break  # i есть в other_neighbors!
             if proof >= len(other_neighbors) + save_proof:
