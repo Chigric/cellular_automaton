@@ -173,13 +173,35 @@ def draw_main_window():
     return mainWin
 
 
+def create_glider(set_x, set_y):
+    return cell_factory([Point(set_x-1, set_y+1), Point(set_x, set_y), Point(set_x+1, set_y+1),
+                         Point(set_x+1, set_y), Point(set_x, set_y-1)])
+
+
+def create_line_glider_Ox(len: int, start_x, start_y):
+    step_x = 5
+    all_cells = []
+    for i in range(len):
+        all_cells.extend(create_glider(start_x + (step_x * i), start_y))
+    return all_cells
+
+"""
+def create_gun():
+"""
+
+"""
+def create(win):
+"""
+
+
 if __name__ == '__main__':
     # Рисование окна
     mainWin = draw_main_window()
     # Некий счётчк на экране
     txt = draw_text(mainWin)
-    # Набор клеток
-    list_cells = cell_factory([Point(4, 5), Point(5, 5), Point(6, 5), Point(5, 6)])
+    # Набор клеток                                                                             *
+    #list_cells = cell_factory([Point(4, 5), Point(5, 5), Point(6, 5), Point(5, 6)])  #create ***
+    list_cells = create_line_glider_Ox(10, -15, 5)
     draw_step(list_cells, mainWin, func_scroll(1, mainWin, txt))
 
     mainWin.getMouse()  # Pause before closing (to view result)
