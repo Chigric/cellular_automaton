@@ -22,7 +22,7 @@ def func_scroll(delta_time: float, window: GraphWin, text: Text):
     x_stat = 0
     y_stat = 0
 
-    def scroll(ticks):
+    def scroll(ticks: float):
         nonlocal x_stat, y_stat, x_end, y_end
         # Window
         x_end += ticks
@@ -32,7 +32,7 @@ def func_scroll(delta_time: float, window: GraphWin, text: Text):
         # Text
         text.move(ticks * 0.8, ticks * -0.9)
         text.setText("Ticks: " + str(all_time))
-        #print("All Ticks: " + str(all_time))
+        print("All Ticks: " + str(all_time))
         window.setCoords(x_stat, y_stat, x_end, y_end)
 
     def next_moment():
@@ -85,28 +85,6 @@ def live_rools(neighbors_quant: int):
         return False
     else:
         return None
-
-
-"""
-Как это работает... (так предпологалось)
-    (pt in cells).lookAtNeighbors()
-    
-        1. get_neighbors
-        
-        2.1. Who in cells is neighbors? 
-        - (pt in cells).getX and getY == (neig in neighbors).getX and getY
-        2.2. Other are NOTcells
-        
-        3. neighbors_quant from 2.1. !!!
-        *   == 1 --- delete
-        *   == 2 or 3 --- nothing
-        *   > 3 --- delete 
-        
-    neighbors_quant from 2.2. !!!
-        *   == 1 --- delete
-        *   == 2 or 3 --- nothing
-        *   > 3 --- delete
-"""
 
 
 def step(cells: list):
@@ -185,23 +163,14 @@ def create_line_glider_Ox(len: int, start_x, start_y):
         all_cells.extend(create_glider(start_x + (step_x * i), start_y))
     return all_cells
 
-"""
-def create_gun():
-"""
-
-"""
-def create(win):
-"""
-
 
 if __name__ == '__main__':
     # Рисование окна
     mainWin = draw_main_window()
     # Некий счётчк на экране
     txt = draw_text(mainWin)
-    # Набор клеток                                                                             *
-    #list_cells = cell_factory([Point(4, 5), Point(5, 5), Point(6, 5), Point(5, 6)])  #create ***
-    list_cells = create_line_glider_Ox(10, -15, 5)
+    # Набор клеток
+    list_cells = cell_factory([Point(4, 5), Point(5, 5), Point(6, 5), Point(5, 6)])
     draw_step(list_cells, mainWin, func_scroll(1, mainWin, txt))
 
     mainWin.getMouse()  # Pause before closing (to view result)
